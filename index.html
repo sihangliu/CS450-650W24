@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<!-- saved from url=(0117)https://www.gopagify.com/page?#2PACX-1vRCpqLje2eSAOybVoL62cOOpAQbmHkJjZ1odmf6jIUnDpUuqwW7kS-WovQs5aMNQtGc8G52FsI4rk_r -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  
+  <title>index</title>
+  <meta name="description" content="Made with Pagify - Convert your Google Doc to a website in under 30 seconds at gopagify.com. No sign up needed.">
+  <meta name="author" content="Kenny Xiao">
+  <meta name="keywords" content="pagify,gopagify,convert,google doc,doc,website,webpage,page,site,generate,conversion,create">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="https://www.gopagify.com/favicon/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="https://www.gopagify.com/favicon/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="https://www.gopagify.com/favicon/favicon-16x16.png">
+  <link rel="manifest" href="https://www.gopagify.com/favicon/site.webmanifest">
+  <link rel="mask-icon" href="https://www.gopagify.com/favicon/safari-pinned-tab.svg" color="#64b9ff">
+  <link rel="shortcut icon" href="https://www.gopagify.com/favicon/favicon.ico">
+  <meta name="msapplication-TileColor" content="#2d89ef">
+  <meta name="msapplication-config" content="./favicon/browserconfig.xml">
+
+  <!-- import JQuery -->
+  <script src="./index_files/jquery.slim.min.js" integrity="sha256-u7e5khyithlIdTpu22PHhENmPcRdFiHRjhAuHcs05RI=" crossorigin="anonymous"></script>
+
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async="" src="./index_files/js"></script>
+  <!--Initializing analytics later because fetch() changes page title. -->
+
+</head>
+
+<body style="margin: 0px; max-width: initial; background-color: rgb(255, 255, 255);" data-new-gr-c-s-check-loaded="14.1142.0" data-gr-ext-installed="">
+  <script>
+    function showError(errMsg) {
+      $("body").append(`<div style='margin: 25px; font-family: Helvetica, Arial, sans-serif'>Failed to retrieve Google Doc: ${errMsg}<br><br>1) Did you follow the instructions and publish your doc to the web?<br>2) Did you copy/paste your URL correctly?</div>`);
+    };
+
+    // Special handling for Safari and Firefox not loading background-color from inline styles
+    function handleColorBug(pageBody, styles) {
+      let classes = $(pageBody).attr("class");   // classes of first div
+      let mainClass = classes.split(" ", 1)[0];  // ex. c10
+
+      let inlineCSS = styles.text();  // long string of entire inline css
+
+      let classDefinition = `.${mainClass}{`;
+      let classIndex = inlineCSS.indexOf(classDefinition);  // index of c10 in inline css
+
+      let bgColorDefinition = "background-color:";
+      let bgColorIndex = inlineCSS.indexOf(bgColorDefinition, classIndex); // index of the background-color style
+      let semicolonIndex = inlineCSS.indexOf(";", bgColorIndex);  // index of the semicolon after background-color
+
+      // Get and set the new color
+      newBackgroundColor = inlineCSS.substring(bgColorIndex + bgColorDefinition.length, semicolonIndex);
+      document.body.style.backgroundColor = newBackgroundColor;
+    }
+
+    function loadHTML(url) {
+      fetch(url)
+      .then(response => {
+        if (!response.ok) {
+          throw new Error("please check you followed the instructions correctly")
+        };
+        return response.text();
+      })
+      .then(data => {
+        let parsedData = $.parseHTML(data);
+        let contents = $(parsedData).filter('#contents');
+        let styles = $(contents).children().eq(0);
+        let pageBody = $(contents).children().eq(1);
+        pageBody.css({"max-width": "800px", "margin": "0 auto"});
+        $("body").append($(styles));
+        $("body").append($(pageBody));
+        let backgroundColor = $(pageBody).css("background-color");
+        $("body").css("background-color", backgroundColor);
+        $("title")[0].innerHTML = $(parsedData).filter("title")[0].innerHTML;
+
+        if (backgroundColor == "rgba(0, 0, 0, 0)") {
+          try {
+            handleColorBug(pageBody, styles);
+          }
+          catch (e) {
+            // Just log the error, the background color resolves on refresh
+            console.error(e, e.stack);
+          };
+        }
+      })
+      .catch(error => {
+        showError(error.message);
+      })
+      .finally(() => {
+        // Now initialize analytics because page title has been updated
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-426Q16RG3H');
+      });
+    };
+
+    function main() {
+      // docId is the published Google doc published id in url, after the # hash
+      const docId = window.location.hash.substr(1);;
+
+      if (docId == null || docId.length == 0) {
+        showError("you did not pass in the document url");
+        return;
+      };
+
+      let url;
+
+      // url from popup has 86 characters. Google doc url has 44 characters
+      if (docId.startsWith("2PACX-") || docId.length > 60) {
+        url = `https://docs.google.com/document/d/e/${docId}/pub`;
+      }
+      else {
+        url = `https://docs.google.com/document/d/${docId}/pub`;
+      };
+
+      loadHTML(url);
+    };
+
+    main();
+
+  </script>
+
+
+<style type="text/css">ol{margin:0;padding:0}table td,table th{padding:0}.c14{border-right-style:solid;padding:5pt 5pt 5pt 5pt;border-bottom-color:#ffffff;border-top-width:3pt;border-right-width:3pt;border-left-color:#ffffff;vertical-align:top;border-right-color:#ffffff;border-left-width:3pt;border-top-style:solid;background-color:#999999;border-left-style:solid;border-bottom-width:3pt;width:152.2pt;border-top-color:#ffffff;border-bottom-style:solid}.c5{border-right-style:solid;padding:5pt 5pt 5pt 5pt;border-bottom-color:#ffffff;border-top-width:3pt;border-right-width:3pt;border-left-color:#ffffff;vertical-align:top;border-right-color:#ffffff;border-left-width:3pt;border-top-style:solid;background-color:#999999;border-left-style:solid;border-bottom-width:3pt;width:153pt;border-top-color:#ffffff;border-bottom-style:solid}.c11{padding-top:18pt;padding-bottom:6pt;line-height:1.15;page-break-after:avoid;orphans:2;widows:2;text-align:justify}.c3{color:#000000;font-weight:400;text-decoration:none;vertical-align:baseline;font-size:11pt;font-family:"Arial";font-style:normal}.c4{color:#000000;font-weight:700;text-decoration:none;vertical-align:baseline;font-size:12pt;font-family:"Arial";font-style:normal}.c15{color:#000000;font-weight:700;text-decoration:none;vertical-align:baseline;font-size:16pt;font-family:"Arial";font-style:normal}.c9{padding-top:14pt;padding-bottom:4pt;line-height:1.15;page-break-after:avoid;orphans:2;widows:2;text-align:justify}.c1{padding-top:0pt;padding-bottom:0pt;line-height:1.15;orphans:2;widows:2;text-align:justify}.c8{font-weight:400;text-decoration:none;vertical-align:baseline;font-family:"Arial";font-style:normal}.c10{border-spacing:0;border-collapse:collapse;margin-right:auto}.c2{padding-top:0pt;padding-bottom:0pt;line-height:1.0;text-align:justify}.c13{background-color:#ffffff;max-width:612pt;padding:0pt 0pt 0pt 0pt}.c7{color:#ffffff;font-size:16pt}.c0{color:inherit;text-decoration:inherit}.c6{font-style:italic}.c16{height:0pt}.c12{height:11pt}.title{padding-top:0pt;color:#000000;font-size:26pt;padding-bottom:3pt;font-family:"Arial";line-height:1.15;page-break-after:avoid;orphans:2;widows:2;text-align:left}.subtitle{padding-top:0pt;color:#666666;font-size:15pt;padding-bottom:16pt;font-family:"Arial";line-height:1.15;page-break-after:avoid;orphans:2;widows:2;text-align:left}li{color:#000000;font-size:11pt;font-family:"Arial"}p{margin:0;color:#000000;font-size:11pt;font-family:"Arial"}h1{padding-top:20pt;color:#000000;font-size:20pt;padding-bottom:6pt;font-family:"Arial";line-height:1.15;page-break-after:avoid;orphans:2;widows:2;text-align:left}h2{padding-top:18pt;color:#000000;font-size:16pt;padding-bottom:6pt;font-family:"Arial";line-height:1.15;page-break-after:avoid;orphans:2;widows:2;text-align:left}h3{padding-top:16pt;color:#434343;font-size:14pt;padding-bottom:4pt;font-family:"Arial";line-height:1.15;page-break-after:avoid;orphans:2;widows:2;text-align:left}h4{padding-top:14pt;color:#666666;font-size:12pt;padding-bottom:4pt;font-family:"Arial";line-height:1.15;page-break-after:avoid;orphans:2;widows:2;text-align:left}h5{padding-top:12pt;color:#666666;font-size:11pt;padding-bottom:4pt;font-family:"Arial";line-height:1.15;page-break-after:avoid;orphans:2;widows:2;text-align:left}h6{padding-top:12pt;color:#666666;font-size:11pt;padding-bottom:4pt;font-family:"Arial";line-height:1.15;page-break-after:avoid;font-style:italic;orphans:2;widows:2;text-align:left}</style><div class="c13 doc-content" style="max-width: 800px; margin: 0px auto;"><p class="c1"><span style="overflow: hidden; display: inline-block; margin: 0.00px 0.00px; border: 0.00px solid #000000; transform: rotate(0.00rad) translateZ(0px); -webkit-transform: rotate(0.00rad) translateZ(0px); width: 813.50px; height: 294.23px;"><img alt="" src="./index_files/laura-ockel-nIEHqGSymRU-unsplash (1).jpg" style="width: 813.50px; height: 540.49px; margin-left: -0.00px; margin-top: -157.85px; transform: rotate(0.00rad) translateZ(0px); -webkit-transform: rotate(0.00rad) translateZ(0px);" title=""></span></p><a id="t.89895d45482750271a3e4b34cfeb4f79eca18c4e"></a><a id="t.0"></a><table class="c10"><tbody><tr class="c16"><td class="c5" colspan="1" rowspan="1"><p class="c2"><span class="c7"><a class="c0" href="https://www.google.com/url?q=https://docs.google.com/spreadsheets/d/e/2PACX-1vT3mw-T_cHIfJwTF-2xmItEEmVnwek7qx7FR8sAoGo_H77WXLmivI96npPLS4-Brwfblrnf-OqKAvQv/pubhtml?gid%3D0%26single%3Dtrue&amp;sa=D&amp;source=editors&amp;ust=1701212530133483&amp;usg=AOvVaw1DrKS-nMTL4hmoNTSxkI_c">Schedule</a></span></p></td><td class="c5" colspan="1" rowspan="1"><p class="c2"><span class="c8 c7">Assignments</span></p></td><td class="c5" colspan="1" rowspan="1"><p class="c2"><span class="c7 c8">Project</span></p></td><td class="c14" colspan="1" rowspan="1"><p class="c2"><span class="c7"><a class="c0" href="https://www.google.com/url?q=https://docs.google.com/document/d/e/2PACX-1vQAC16zLkajmG0GRyChfxproI1oojOxgsTrhK6s2OTGMvpNdw29v-iLH-YqhT1HtEtAGfqmArqADMGT/pub&amp;sa=D&amp;source=editors&amp;ust=1701212530134280&amp;usg=AOvVaw0lc2-KmEcEtsYpkpEteqUQ">Syllabus</a></span></p></td></tr></tbody></table><h2 class="c11" id="h.wl0buh2knelp"><span class="c15">Class Information</span></h2><p class="c1"><span class="c3">Meeting location: MC 4063<br>Meeting time: Tue &amp; Thu 11:30 AM – 12:50 PM</span></p><p class="c1"><span class="c3">Piazza: TBD</span></p><p class="c1"><span class="c3">Homework submission (LEARN): https://learn.uwaterloo.ca/d2l/home/982403</span></p><h4 class="c9" id="h.8i9e83o7ug3r"><span class="c4">Instructor</span></h4><p class="c1"><span class="c3">Sihang Liu</span></p><p class="c1"><span><a class="c0" href="mailto:sihangliu@uwaterloo.ca">sihangliu@uwaterloo.ca</a></span><span class="c3">&nbsp;</span></p><p class="c1"><span class="c6">P</span><span class="c6">lease include [CS 450] or [CS 650] in the beginning of subject line</span></p><p class="c1"><span class="c3">Office hour: TBD</span></p><p class="c1"><span>Office: DC 3528</span></p><h4 class="c9" id="h.o43drltcup2b"><span class="c4">Teaching Assistant</span></h4><p class="c1"><span class="c3">Daewoo Kim</span></p><p class="c1"><span><a class="c0" href="mailto:daewoo.kim@uwaterloo.ca">daewoo.kim@uwaterloo.ca</a></span></p><p class="c1"><span class="c6">Please include [CS 450] or [CS 650] in the beginning of subject line</span></p><p class="c1"><span class="c3">Office hour: TBD</span></p><p class="c1"><span>Office: DC </span></p><h2 class="c11" id="h.yie3gj1nxryj"><span class="c15">Course Overview</span></h2><p class="c1"><span class="c3">Computer architecture is science and engineering that includes the design and interconnect of hardware components and hardware-software interface to create a computer system, in order to meet the demand for certain demands, such as particular functionalities, performance / cost / energy requirements, etc. This course covers the fundamental components in modern computing systems, such as processors and memory systems, as well as edge-cutting technologies in computer architecture, such as domain-specific accelerators and new memory technologies. In this course, students will learn the designs, concepts, and tradeoffs of different architectures not only through lectures but also from a research-oriented course project. </span></p><p class="c1 c12"><span class="c3"></span></p><p class="c1 c12"><span class="c3"></span></p><p class="c1 c12"><span class="c3"></span></p></div></body><grammarly-desktop-integration data-grammarly-shadow-root="true"><template shadowrootmode="open"><style>
+      div.grammarly-desktop-integration {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        white-space: nowrap;
+        border: 0;
+        -moz-user-select: none;
+        -webkit-user-select: none;
+        -ms-user-select:none;
+        user-select:none;
+      }
+
+      div.grammarly-desktop-integration:before {
+        content: attr(data-content);
+      }
+    </style><div aria-label="grammarly-integration" role="group" tabindex="-1" class="grammarly-desktop-integration" data-content="{&quot;mode&quot;:&quot;full&quot;,&quot;isActive&quot;:true,&quot;isUserDisabled&quot;:false}"></div></template></grammarly-desktop-integration></html>
